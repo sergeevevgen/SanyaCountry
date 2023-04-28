@@ -5,18 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SanyaCountryLogicContracts.BindingModels
+namespace SanyaCountryListImplement.Models
 {
-    //Поселение (в нём находятся несколько строений разных типов)
-    public class SettlementBindingModel
+    public class Settlement
     {
         //Номер
-        public int? Id { get; set; }
+        public int Id { get; set; }
         //Название
         public string Name { get; set; }
         //Тип поселения
         public SettlementType Type { get; set; }
         //Строения в поселении
-        public Dictionary<int, (string, int)> Buildings { get; set; }
+        public Dictionary<int, int> Buildings { get; set; }
     }
 }

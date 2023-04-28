@@ -4,19 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SanyaCountryLogicContracts.BindingModels
+namespace SanyaCountryListImplement.Models
 {
-    //Строение в поселении (может быть несколько строений одного типа)
-    public class BuildingBindingModel
+    public class Building
     {
         //Номер
-        public int? Id { get; set; }
+        public int Id { get; set; }
         //Название вида дома
         public string Name { get; set; }
-        ////Улица
-        //public string Street { get; set; }
-        ////Дом
-        //public string House { get; set; }
         //Стоимость
         public double Price { get; set; }
         //Дата постройки
