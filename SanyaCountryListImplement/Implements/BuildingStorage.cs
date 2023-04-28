@@ -21,15 +21,12 @@ namespace SanyaCountryListImplement.Implements
 
         public void Delete(BuildingBindingModel model)
         {
-            for (int i = 0; i < source.Buildings.Count; ++i)
+            var building = source.Buildings.FirstOrDefault(x => x.Id == model.Id.Value);
+            if (building == null)
             {
-                if (source.Buildings[i].Id == model.Id.Value)
-                {
-                    source.Buildings.RemoveAt(i);
-                    return;
-                }
+                throw new Exception("Элемент не найден");
             }
-            throw new Exception("Элемент не найден");
+            source.Buildings.Remove(building);
         }
 
         public BuildingViewModel GetElement(BuildingBindingModel model)
@@ -38,16 +35,9 @@ namespace SanyaCountryListImplement.Implements
             {
                 return null;
             }
-
-            foreach (var b in source.Buildings)
-            {
-                if (b.Id == model.Id || b.Name ==
-                    model.Name)
-                {
-                    return CreateModel(b);
-                }
-            }
-            return null;
+            var building = source.Buildings
+                .FirstOrDefault(x => x.Name == model.Name || x.Id == model.Id);
+            return building != null ? CreateModel(building) : null;
         }
 
         public List<BuildingViewModel> GetFilteredList(BuildingBindingModel model)
@@ -57,56 +47,43 @@ namespace SanyaCountryListImplement.Implements
                 return null;
             }
 
-            var result = new List<BuildingViewModel>();
-            foreach (var b in source.Buildings)
-            {
-                if (b.Name.Contains(model.Name))
-                {
-                    result.Add(CreateModel(b));
-                }
-            }
-            return result;
+            return source.Buildings
+                .Where(rec => rec.Name.Contains(model.Name))
+                .ToList()
+                .Select(CreateModel)
+                .ToList();
         }
 
         public List<BuildingViewModel> GetFullList()
         {
-            var result = new List<BuildingViewModel>();
-            foreach (var b in source.Buildings)
-            {
-                result.Add(CreateModel(b));
-            }
-            return result;
+            return source.Buildings
+                .ToList()
+                .Select(CreateModel)
+                .ToList();
         }
 
         public void Insert(BuildingBindingModel model)
         {
-            var tmp = new Building { Id = 1 };
-            foreach (var b in source.Buildings)
+            int id = 1;
+            if (source.Buildings.Count > 0)
             {
-                if (b.Id >= tmp.Id)
-                {
-                    tmp.Id = b.Id + 1;
-                }
+                id = source.Buildings.Max(x => x.Id) + 1;
             }
+            
+            var tmp = new Building { Id = id };
             source.Buildings.Add(CreateModel(model, tmp));
         }
 
         public void Update(BuildingBindingModel model)
         {
-            Building tmp = null;
-            foreach (var b in source.Buildings)
-            {
-                if (b.Id == model.Id)
-                {
-                    tmp = b;
-                    break;
-                }
-            }
+            var tmp = source.Buildings
+                .FirstOrDefault(rec => rec.Id == model.Id);
 
             if (tmp == null)
             {
                 throw new Exception("Элемент не найден");
             }
+
             CreateModel(model, tmp);
         }
 
@@ -114,7 +91,7 @@ namespace SanyaCountryListImplement.Implements
         {
             building.Name = model.Name;
             building.Price = model.Price;
-            building.Created = model.Created;
+            building.Created = model.Created.Value;
             building.Square = model.Square;
             return building;
         }
@@ -126,7 +103,7 @@ namespace SanyaCountryListImplement.Implements
                 Id = building.Id,
                 Name = building.Name,
                 Price = building.Price,
-                Created = building.Created,
+                Created = building.Created.Value,
                 Square = building.Square
             };
         }

@@ -21,15 +21,13 @@ namespace SanyaCountryListImplement.Implements
 
         public void Delete(SettlementBindingModel model)
         {
-            for (int i = 0; i < source.Settlements.Count; ++i)
+            var element = source.Settlements
+                .FirstOrDefault(x => x.Id == model.Id);
+            if (element == null)
             {
-                if (source.Settlements[i].Id == model.Id)
-                {
-                    source.Settlements.RemoveAt(i);
-                    return;
-                }
+                throw new Exception("Элемент не найден");
             }
-            throw new Exception("Элемент не найден");
+            source.Settlements.Remove(element);
         }
 
         public SettlementViewModel GetElement(SettlementBindingModel model)
@@ -38,15 +36,9 @@ namespace SanyaCountryListImplement.Implements
             {
                 return null;
             }
-            foreach (var s in source.Settlements)
-            {
-                if (s.Id == model.Id || s.Name ==
-                model.Name)
-                {
-                    return CreateModel(s);
-                }
-            }
-            return null;
+            var element = source.Settlements
+                .FirstOrDefault(x => x.Name == model.Name || x.Id == model.Id);
+            return element != null ? CreateModel(element) : null;
         }
 
         public List<SettlementViewModel> GetFilteredList(SettlementBindingModel model)
@@ -55,62 +47,46 @@ namespace SanyaCountryListImplement.Implements
             {
                 return null;
             }
-            var result = new List<SettlementViewModel>();
-            foreach (var s in source.Settlements)
-            {
-                if (s.Name.Contains(model.Name))
-                {
-                    result.Add(CreateModel(s));
-                }
-            }
-            return result;
+            
+            return source.Settlements
+                .Where(rec => rec.Name.Contains(model.Name))
+                .ToList()
+                .Select(CreateModel)
+                .ToList();
         }
 
         public List<SettlementViewModel> GetFullList()
         {
-            var result = new List<SettlementViewModel>();
-            foreach (var s in source.Settlements)
-            {
-                result.Add(CreateModel(s));
-            }
-            return result;
+            return source.Settlements
+                .ToList()
+                .Select(CreateModel)
+                .ToList();
         }
 
         public void Insert(SettlementBindingModel model)
         {
+            int id = 1;
+            if (source.Settlements.Count > 0)
+            {
+                id = source.Settlements.Max(x => x.Id) + 1;
+            }
             var tmp = new Settlement
             {
-                Id = 1,
+                Id = id,
                 Buildings = new Dictionary<int, int>()
             };
-
-            foreach (var s in source.Settlements)
-            {
-                if (s.Id >= tmp.Id)
-                {
-                    tmp.Id = s.Id + 1;
-                }
-            }
             source.Settlements.Add(CreateModel(model, tmp));
         }
 
         public void Update(SettlementBindingModel model)
         {
-            Settlement tmp = null;
-            foreach (var s in source.Settlements)
-            {
-                if (s.Id == model.Id)
-                {
-                    tmp = s;
-                    break;
-                }
-            }
+            var element = source.Settlements.FirstOrDefault(rec => rec.Id == model.Id);
 
-            if (tmp == null)
+            if (element == null)
             {
                 throw new Exception("Элемент не найден");
             }
-            CreateModel(model, tmp);
+            CreateModel(model, element);
         }
 
         private static Settlement CreateModel(SettlementBindingModel model, Settlement settlement)
@@ -146,29 +122,14 @@ namespace SanyaCountryListImplement.Implements
 
         private SettlementViewModel CreateModel(Settlement settlement)
         {
-            // требуется дополнительно получить список строений для поселения с
-            //названиями и их количество
-            var buildings = new Dictionary<int, (string, int)>();
-            foreach (var b in settlement.Buildings)
-            {
-                string bName = string.Empty;
-                foreach (var building in source.Buildings)
-                {
-                    if (b.Key == building.Id)
-                    {
-                        bName = building.Name;
-                        break;
-                    }
-                }
-                buildings.Add(b.Key, (bName, b.Value));
-            }
-
             return new SettlementViewModel
             {
                 Id = settlement.Id,
                 Name = settlement.Name,
                 Type = settlement.Type.ToString(),
-                Buildings = buildings
+                Buildings = settlement.Buildings
+                .ToDictionary(x => x.Key, 
+                x => (source.Buildings.FirstOrDefault(xb => xb.Id == x.Key).Name, x.Value))
             };
         }
     }
