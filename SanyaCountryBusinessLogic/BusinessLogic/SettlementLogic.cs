@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SanyaCountryBusinessLogic.BusinessLogic
@@ -31,6 +32,11 @@ namespace SanyaCountryBusinessLogic.BusinessLogic
             if (element != null && element.Id != model.Id)
             {
                 throw new Exception("Уже есть поселение с таким названием");
+            }
+            //Проверяет на то, чтобы название начиналось с заглавной буквы и имело хотя бы одну цифру
+            if (!Regex.IsMatch(model.Name, @"^[A-Z]+\w*\d+\w*$"))
+            {
+                throw new Exception("Имя должно начинаться с заглавной буквы");
             }
 
             if (model.Id.HasValue)
