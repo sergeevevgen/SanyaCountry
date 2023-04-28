@@ -1,3 +1,5 @@
+using SanyaCountryContracts.BindingModels;
+using SanyaCountryContracts.BusinessLogicsContracts;
 using SanyaCountryLogicContracts.BindingModels;
 using SanyaCountryLogicContracts.BusinessLogicsContracts;
 using SanyaCountryView;
@@ -8,11 +10,12 @@ namespace SanyaCountry
     public partial class FormMain : Form
     {
         private readonly ISettlementLogic _settlementLogic;
-
-        public FormMain(ISettlementLogic settlementLogic)
+        private readonly IReportLogic _reportLogic;
+        public FormMain(ISettlementLogic settlementLogic, IReportLogic reportLogic)
         {
             InitializeComponent();
             _settlementLogic = settlementLogic;
+            _reportLogic = reportLogic;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -90,6 +93,32 @@ namespace SanyaCountry
                         MessageBoxIcon.Error);
                     }
                     LoadData();
+                }
+            }
+        }
+
+        private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dateTimePickerFrom.Value.Date >= DateTime.Now)
+            {
+                MessageBox.Show("Дата начала должна быть меньше сегодняшней даты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            using var dialog = new SaveFileDialog { Filter = "pdf|*.pdf" };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _reportLogic.SaveSettlementBuildingsToPdfFile(new ReportBindingModel
+                    {
+                        FileName = dialog.FileName,
+                        DateFrom = dateTimePickerFrom.Value,
+                    });
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

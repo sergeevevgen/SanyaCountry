@@ -1,4 +1,7 @@
 using SanyaCountryBusinessLogic.BusinessLogic;
+using SanyaCountryBusinessLogic.OfficePackage;
+using SanyaCountryBusinessLogic.OfficePackage.Implements;
+using SanyaCountryContracts.BusinessLogicsContracts;
 using SanyaCountryDatabaseImplement.Implements;
 using SanyaCountryLogicContracts.BusinessLogicsContracts;
 using SanyaCountryLogicContracts.StoragesContracts;
@@ -47,6 +50,12 @@ namespace SanyaCountry
             HierarchicalLifetimeManager());
 
             currentContainer.RegisterType<ISettlementLogic, SettlementLogic>(new
+            HierarchicalLifetimeManager());
+
+            currentContainer.RegisterType<IReportLogic, ReportLogic>(new
+            HierarchicalLifetimeManager());
+
+            currentContainer.RegisterType<AbstractSaveToPdf, SaveToPdf>(new
             HierarchicalLifetimeManager());
 
             return currentContainer;

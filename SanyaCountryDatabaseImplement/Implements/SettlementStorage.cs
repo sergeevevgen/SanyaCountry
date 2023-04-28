@@ -168,7 +168,7 @@ namespace SanyaCountryDatabaseImplement.Implements
                 Name = settlement.Name,
                 Type = settlement.Type.ToString(),
                 Buildings = settlement.SettlementBuildings
-                .ToDictionary(x => x.Id, x => (x.Building?.Name, x.Count))
+                .ToDictionary(x => x.BuildingId, x => (x.Building?.Name, x.Count))
             };
         }
     }
