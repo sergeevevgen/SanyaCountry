@@ -28,14 +28,7 @@ namespace SanyaCountry
         {
             try
             {
-                var list = _settlementLogic.Read(null);
-                if (list != null)
-                {
-                    dataGridView.DataSource = list;
-                    dataGridView.Columns[0].Visible = false;
-                    dataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dataGridView.Columns[3].Visible = false;
-                }
+                Program.ConfigGrid(_settlementLogic.Read(null), dataGridView);
             }
             catch (Exception ex)
             {

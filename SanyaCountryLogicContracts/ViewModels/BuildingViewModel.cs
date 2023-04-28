@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SanyaCountryContracts.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,22 +12,19 @@ namespace SanyaCountryLogicContracts.ViewModels
     public class BuildingViewModel
     {
         //Номер
+        [Column(title: "Номер", width: 50)]
         public int Id { get; set; }
         //Название вида дома
-        [DisplayName("Название")]
+        [Column(title: "Название", gridViewAutoSize: GridViewAutoSize.Fill)]
         public string Name { get; set; }
-        ////Улица
-        //public string Street { get; set; }
-        ////Дом
-        //public string House { get; set; }
         //Стоимость
-        [DisplayName("Стоимость")]
+        [Column(title: "Стоимость", width: 80)]
         public double Price { get; set; }
         //Дата постройки
-        [DisplayName("Дата создания")]
+        [Column(title: "Дата создания", gridViewAutoSize: GridViewAutoSize.Fill)]
         public DateTime? Created { get; set; }
         //Площадь здания
-        [DisplayName("Площадь")]
+        [Column(title: "Площадь", width: 80)]
         public double Square { get; set; }
     }
 }
