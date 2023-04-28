@@ -22,5 +22,8 @@ namespace SanyaCountryContracts.BusinessLogicsContracts
         /// </summary>
         /// <param name="model"></param>
         void SaveSettlementBuildingsToPdfFile(ReportBindingModel model);
+
+        //Бекап
+        public void SaveReportData(ReportBindingModel model);
     }
 }

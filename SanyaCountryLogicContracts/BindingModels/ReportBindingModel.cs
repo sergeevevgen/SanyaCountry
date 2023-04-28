@@ -9,6 +9,7 @@ namespace SanyaCountryContracts.BindingModels
     public class ReportBindingModel
     {
         public string FileName { get; set; }
+        public string FolderName { get; set; }
         public DateTime? DateFrom { get; set; }
     }
 }

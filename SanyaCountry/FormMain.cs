@@ -1,3 +1,4 @@
+using SanyaCountryBusinessLogic.BusinessLogic;
 using SanyaCountryContracts.BindingModels;
 using SanyaCountryContracts.BusinessLogicsContracts;
 using SanyaCountryLogicContracts.BindingModels;
@@ -120,6 +121,34 @@ namespace SanyaCountry
                 {
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void бекапToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dateTimePickerFrom.Value.Date >= DateTime.Now)
+            {
+                MessageBox.Show("Дата начала должна быть меньше сегодняшней даты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                var fbd = new FolderBrowserDialog();
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    _reportLogic.SaveReportData(new ReportBindingModel
+                    {
+                        FolderName = fbd.SelectedPath,
+                        DateFrom = dateTimePickerFrom.Value
+                    });
+                    MessageBox.Show("Бекап создан", "Сообщение",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
             }
         }
     }

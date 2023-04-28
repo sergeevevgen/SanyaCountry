@@ -46,6 +46,7 @@ namespace SanyaCountry
             currentContainer.RegisterType<ISettlementStorage, SettlementStorage>(new
             HierarchicalLifetimeManager());
 
+
             currentContainer.RegisterType<IBuildingLogic, BuildingLogic>(new
             HierarchicalLifetimeManager());
 
@@ -54,6 +55,7 @@ namespace SanyaCountry
 
             currentContainer.RegisterType<IReportLogic, ReportLogic>(new
             HierarchicalLifetimeManager());
+
 
             currentContainer.RegisterType<AbstractSaveToPdf, SaveToPdf>(new
             HierarchicalLifetimeManager());
