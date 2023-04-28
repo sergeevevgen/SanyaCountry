@@ -137,11 +137,11 @@ namespace SanyaCountry
             {
                 try
                 {
-                    _reportLogic.SaveOtchet(new ReportBindingModel
+                    Task.Run(() => _reportLogic.SaveOtchet(new ReportBindingModel
                     {
                         FileName = dialog.FileName,
                         DateFrom = dateTimePickerFrom.Value
-                    });
+                    }));
                     MessageBox.Show("Бекап создан", "Сообщение",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
