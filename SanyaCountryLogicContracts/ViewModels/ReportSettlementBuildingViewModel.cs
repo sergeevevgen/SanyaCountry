@@ -9,10 +9,17 @@ namespace SanyaCountryContracts.ViewModels
 {
     public class ReportSettlementBuildingViewModel
     {
+        //Этот атрибут указывает, какое поле не сериализуется
+        [XmlIgnore]
         public string SettlementName { get; set; }
         
         public int TotalCount { get; set; }
-        [XmlIgnore]
-        public List<Tuple<string, int>> Buildings { get; set; }
+        
+        public List<(string, int)> Buildings { get; set; }
+
+        public ReportSettlementBuildingViewModel()
+        {
+            Buildings = new List<(string, int)>();
+        }
     }
 }

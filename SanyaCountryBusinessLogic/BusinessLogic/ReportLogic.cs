@@ -38,7 +38,7 @@ namespace SanyaCountryBusinessLogic.BusinessLogic
                 var record = new ReportSettlementBuildingViewModel
                 {
                     SettlementName = s.Name,
-                    Buildings = new List<Tuple<string, int>>(),
+                    Buildings = new List<(string, int)>(),
                     TotalCount = 0
                 };
                 foreach (var building in s.Buildings)
@@ -49,7 +49,7 @@ namespace SanyaCountryBusinessLogic.BusinessLogic
                     });
                     if (el != null && el.Created >= model.DateFrom)
                     {
-                        record.Buildings.Add(new Tuple<string, int>(building.Value.Item1,
+                        record.Buildings.Add((building.Value.Item1,
                         building.Value.Item2));
                         record.TotalCount += building.Value.Item2;
                     }
@@ -57,6 +57,30 @@ namespace SanyaCountryBusinessLogic.BusinessLogic
                 list.Add(record);
             }
             return list;
+        }
+
+        public static void SaveData(string path, object data)
+        {
+            using (var writer = new StreamWriter(path))
+            {
+                var serializer = new XmlSerializer(data.GetType());
+                serializer.Serialize(writer, data);
+            }
+        }
+
+        public static T LoadData<T>(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                return (T)serializer.Deserialize(stream);
+            }
+        }
+
+        public void SaveOtchet(ReportBindingModel model)
+        {
+            var list = GetSettlementBuildings(model);
+            SaveData(model.FileName, list);
         }
 
         public void SaveSettlementBuildingsToPdfFile(ReportBindingModel model)
@@ -69,43 +93,6 @@ namespace SanyaCountryBusinessLogic.BusinessLogic
                 DateFrom = model.DateFrom.Value,
                 SettlementBuildings = list
             });
-        }
-
-        public void SaveReportData(ReportBindingModel model)
-        {
-            var list = GetSettlementBuildings(model);
-            if (list == null)
-            {
-                return;
-            }
-            try
-            {
-                var dirInfo = new DirectoryInfo(model.FolderName);
-                if (dirInfo.Exists)
-                {
-                    foreach (FileInfo file in dirInfo.GetFiles())
-                    {
-                        file.Delete();
-                    }
-                }
-                string fileName = $"{model.FolderName}.zip";
-                if (File.Exists(fileName))
-                {
-                    File.Delete(fileName);
-                }
-                var xmlSerializer = new XmlSerializer(typeof(ReportSettlementBuildingViewModel));
-                var obj = new ReportSettlementBuildingViewModel();
-                using var fs = new FileStream(string.Format("{0}/{1}.xml",
-                model.FolderName, obj.GetType().Name), FileMode.OpenOrCreate);
-                xmlSerializer.Serialize(fs, list);
-                ZipFile.CreateFromDirectory(model.FolderName, fileName);
-                dirInfo.Delete(true);
-            }
-            catch (Exception)
-            {
-                // делаем проброс
-                throw;
-            }
         }
     }
 }

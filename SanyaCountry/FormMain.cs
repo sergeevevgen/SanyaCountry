@@ -131,24 +131,25 @@ namespace SanyaCountry
                 MessageBox.Show("Дата начала должна быть меньше сегодняшней даты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            try
+            
+            using var dialog = new SaveFileDialog { Filter = "xml|*.xml" };
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                var fbd = new FolderBrowserDialog();
-                if (fbd.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    _reportLogic.SaveReportData(new ReportBindingModel
+                    _reportLogic.SaveOtchet(new ReportBindingModel
                     {
-                        FolderName = fbd.SelectedPath,
+                        FileName = dialog.FileName,
                         DateFrom = dateTimePickerFrom.Value
                     });
                     MessageBox.Show("Бекап создан", "Сообщение",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                }
             }
         }
     }
