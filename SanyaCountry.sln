@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanyaCountryBusinessLogic",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanyaCountryListImplement", "SanyaCountryListImplement\SanyaCountryListImplement.csproj", "{3B8E1B21-4146-4D4E-B0A4-063BABCDEB07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SanyaCountryDatabaseImplement", "SanyaCountryDatabaseImplement\SanyaCountryDatabaseImplement.csproj", "{EDCD7138-9A2E-4A7E-B258-5A7C784BD3CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3B8E1B21-4146-4D4E-B0A4-063BABCDEB07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B8E1B21-4146-4D4E-B0A4-063BABCDEB07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B8E1B21-4146-4D4E-B0A4-063BABCDEB07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDCD7138-9A2E-4A7E-B258-5A7C784BD3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDCD7138-9A2E-4A7E-B258-5A7C784BD3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDCD7138-9A2E-4A7E-B258-5A7C784BD3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDCD7138-9A2E-4A7E-B258-5A7C784BD3CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
